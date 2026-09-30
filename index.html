@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دست‌نویس | صفحه جدید</title>
+  <link rel="icon" type="image/png" href="assets/icons/icon48.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Wallpaper Backdrop with soft lighting overlay -->
+  <div class="wallpaper-overlay"></div>
+
+  <!-- Main Grid Dashboard -->
+  <main class="dashboard-container">
+    
+    <!-- LEFT COLUMN: Weather, Clock, Events & Persian Calendar -->
+    <section class="col-left">
+      
+      <!-- Top Widget: Weather & Clock & Today's Events -->
+      <div class="glass-card weather-clock-card">
+        <div class="weather-clock-header">
+          <!-- Weather Section -->
+          <div class="weather-meta">
+            <div class="weather-temp-row">
+              <div id="weather-icon-container" class="weather-icon-box">
+                <!-- SVG Weather Icon injected here -->
+              </div>
+              <span id="weather-temp" class="weather-temp-number">۳۱°</span>
+            </div>
+            <div class="weather-comment-box">
+              <span id="weather-comment" class="weather-quote">کولرم جواب نیست :(</span>
+              <button id="weather-city-btn" class="city-badge" title="تغییر شهر">
+                <span id="weather-city-name">تهران</span>
+                <span class="city-pin">📍</span>
+              </button>
+            </div>
+            <div class="weather-extra-info">
+              <span id="weather-minmax">حداکثر ۳۴° | حداقل ۲۲°</span>
+            </div>
+          </div>
+
+          <!-- Clock & Date Section -->
+          <div class="clock-date-meta">
+            <div id="digital-clock" class="digital-clock">۱۲:۲۰</div>
+            <div id="header-persian-date" class="persian-header-date">۲۹ خرداد</div>
+            <div id="header-sub-date" class="sub-header-date">2026-09-30 | ۱۹ ربیع‌الثانی ۱۴۴۸</div>
+          </div>
+        </div>
+
+        <!-- Quick Links Subrow -->
+        <div class="quick-nav-pills">
+          <button id="link-forecast" class="pill-btn">پیش‌بینی</button>
+          <span class="pill-sep">-</span>
+          <button id="link-prayer-times" class="pill-btn">اوقات شرعی</button>
+          <span class="pill-sep">-</span>
+          <button id="link-timer" class="pill-btn">تایمر</button>
+        </div>
+
+        <!-- Events / Occasions & Hand Mascot Row -->
+        <div class="events-mascot-row">
+          <div class="mascot-box">
+            <img src="assets/images/hand.jpg" alt="دست‌نویس" class="mascot-img">
+          </div>
+          <div class="occasions-wrapper">
+            <ul id="today-occasions-list" class="occasions-list">
+              <li class="occasion-item"><span class="bullet">•</span> <span>ددلاین ۲ تسک</span></li>
+              <li class="occasion-item"><span class="bullet">•</span> <span>ولادت امام علی(ع) و روز پدر</span></li>
+              <li class="occasion-item"><span class="bullet">•</span> <span>روز گرامیداشت سعد و برق</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Widget: Persian Calendar (گاهشمار شمسی) -->
+      <div class="glass-card calendar-card">
+        <!-- Calendar Nav Header -->
+        <div class="calendar-header">
+          <button id="cal-prev-btn" class="cal-nav-btn" title="ماه قبل">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <div class="calendar-titles">
+            <h2 id="cal-month-title" class="cal-month-name">شهریور ۱۴۰۱</h2>
+            <div id="cal-sub-title" class="cal-sub-info">ذی‌الحجه - ذی‌القعده ۱۴۴۳ | Aug - Sep 2022</div>
+          </div>
+          <button id="cal-next-btn" class="cal-nav-btn" title="ماه بعد">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+        </div>
+
+        <!-- Weekday Headers (ش, ی, د, س, چ, پ, ج) -->
+        <div class="calendar-weekdays-row">
+          <span class="weekday-col">ش</span>
+          <span class="weekday-col">ی</span>
+          <span class="weekday-col">د</span>
+          <span class="weekday-col">س</span>
+          <span class="weekday-col">چ</span>
+          <span class="weekday-col">پ</span>
+          <span class="weekday-col friday-col">ج</span>
+        </div>
+
+        <!-- Days Grid -->
+        <div id="cal-days-grid" class="calendar-grid">
+          <!-- Injected by CalendarUI.js -->
+        </div>
+
+        <!-- Calendar Bottom Action Buttons -->
+        <div class="calendar-footer-actions">
+          <button id="btn-date-converter" class="cal-footer-btn">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
+            <span>تبدیل تاریخ</span>
+          </button>
+          <a href="https://calendar.google.com" target="_blank" class="cal-footer-btn">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>تقویم گوگل</span>
+          </a>
+          <button id="cal-today-btn" class="cal-footer-btn cal-today-link">
+            <span>امروز</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- CENTER COLUMN: Search & Shortcuts Card + Floating Music Player -->
+    <section class="col-center">
+      
+      <!-- Unified Center Card: Search at Top + Shortcuts Grid Immediately Below -->
+      <div class="center-main-card glass-card">
+        <!-- Search Bar at Top of Card -->
+        <div class="search-section">
+          <form id="search-form" class="search-box glass-pill">
+            <button type="submit" class="search-btn" title="جستجو">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+            <button type="button" id="search-engine-icon" class="search-ai-btn" title="دستیار">
+              <span class="ai-sparkle">✦</span>
+            </button>
+            <input 
+              type="text" 
+              id="search-input" 
+              class="search-input-field" 
+              placeholder="چطوری جهان رو بهتر بشناسم..." 
+              autocomplete="off" 
+              autofocus
+            />
+          </form>
+        </div>
+
+        <!-- User Custom Site Shortcuts Grid (Starts right from top under search) -->
+        <div class="shortcuts-wrapper">
+          <div id="shortcuts-grid" class="shortcuts-grid">
+            <!-- Injected dynamically by Shortcuts.js with user-editable shortcuts & '+' slots -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating Music Player Capsule ("Hamin Moon... Mohsen Chavoshi") -->
+      <div class="music-player-capsule glass-pill">
+        <div class="music-cover-box">
+          <img id="music-album-cover" src="assets/images/album.jpg" alt="کاور آهنگ" class="album-cover-img">
+        </div>
+        <div class="music-info">
+          <div id="music-track-title" class="track-title">Hamin Moon...</div>
+          <div id="music-track-artist" class="track-artist">Mohsen Chavoshi</div>
+        </div>
+        <div class="music-controls">
+          <button id="music-play-btn" class="music-ctrl-btn play-pause-btn" title="پخش / توقف">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="white"><polygon points="6,4 20,12 6,20"/></svg>
+          </button>
+          <button id="music-next-btn" class="music-ctrl-btn" title="تغییر ترک">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="white"><polygon points="5,4 15,12 5,20"/><line x1="19" y1="5" x2="19" y2="19" stroke="white" stroke-width="2"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT COLUMN: To-Do & Notes ("دست نویس") -->
+    <section class="col-right">
+      <div class="glass-card todo-card-container">
+        <!-- Todo Header -->
+        <div class="todo-card-header">
+          <h2 class="todo-header-title">دست نویس</h2>
+        </div>
+
+        <!-- Task List -->
+        <div id="todos-container" class="todos-scroll-area">
+          <!-- Injected by todo.js -->
+        </div>
+
+        <!-- Todo Footer Button: + نوشتن کار جدید -->
+        <div class="todo-footer">
+          <button id="btn-add-todo" class="btn-new-task">
+            <span class="plus-sign">+</span>
+            <span>نوشتن کار جدید</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAR RIGHT DOCK: Floating Slim Sidebar -->
+    <aside class="sidebar-dock glass-pill-vertical">
+      <button class="dock-btn mascot-dock-btn" title="دست‌نویس">
+        <span class="dock-emoji">✋</span>
+      </button>
+      <button id="sidebar-btn-home" class="dock-btn" title="صفحه اصلی">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </button>
+      <button id="sidebar-btn-widgets" class="dock-btn" title="ابزارک‌ها">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </button>
+      <button id="sidebar-btn-prayer" class="dock-btn" title="اوقات شرعی">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+      <button id="sidebar-btn-settings" class="dock-btn" title="تنظیمات و پس‌زمینه">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+      <button id="sidebar-btn-fullscreen" class="dock-btn" title="تمام صفحه">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      </button>
+      
+      <div class="dock-spacer"></div>
+
+      <!-- Avatar Profile at Bottom -->
+      <div class="dock-avatar-box" title="پروفایل کاربر">
+        <img src="assets/images/hand.jpg" alt="پروفایل" class="dock-avatar-img">
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. Day Detail Modal (Shows Gregorian Date on Day Click - Requirement 2) -->
+  <div id="day-detail-modal" class="custom-modal-overlay">
+    <div id="day-modal-backdrop" class="modal-backdrop"></div>
+    <div class="modal-card glass-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">جزئیات و معادل تاریخ</h3>
+        <button id="day-modal-close" class="modal-close-btn">✕</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Persian Date Display -->
+        <div class="date-detail-banner">
+          <span class="date-label">تاریخ هجری شمسی</span>
+          <div id="modal-persian-date" class="date-highlight-persian">چهارشنبه، ۸ مهر ۱۴۰۵</div>
+        </div>
+
+        <!-- Gregorian Date Card (Special emphasis as requested!) -->
+        <div class="date-detail-box gregorian-box">
+          <div class="date-box-header">
+            <span class="date-badge-tag">تقویم میلادی (Gregorian)</span>
+            <button id="btn-copy-gregorian" class="btn-copy">کپی تاریخ میلادی</button>
+          </div>
+          <div id="modal-gregorian-date" class="date-highlight-gregorian">Wednesday, September 30, 2026</div>
+          <div class="date-sub-details">
+            <span>فرمت استاندارد: <strong id="modal-gregorian-short">2026-09-30</strong></span>
+            <span>معادل فارسی: <strong id="modal-gregorian-fa">۳۰ سپتامبر ۲۰۲۶</strong></span>
+          </div>
+        </div>
+
+        <!-- Hijri Lunar Date Card -->
+        <div class="date-detail-box hijri-box">
+          <span class="date-badge-tag">تقویم هجری قمری</span>
+          <div id="modal-hijri-date" class="date-highlight-hijri">۱۹ ربیع‌الثانی ۱۴۴۸</div>
+        </div>
+
+        <!-- Occasion / Holiday Banner -->
+        <div id="modal-occasion-box" class="occasion-notice-box" style="display: none;">
+          <span class="occasion-icon">✨</span>
+          <span id="modal-occasion-text" class="occasion-text"></span>
+        </div>
+
+        <div class="modal-actions-row">
+          <button id="btn-add-todo-for-day" class="btn-primary-action">
+            <span>+ افزودن کار برای این روز</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Date Converter Modal (تبدیل تاریخ) -->
+  <div id="date-converter-modal" class="custom-modal-overlay">
+    <div class="modal-backdrop" onclick="document.getElementById('date-converter-modal').classList.remove('active')"></div>
+    <div class="modal-card glass-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">مبدل هوشمند تاریخ</h3>
+        <button class="modal-close-btn" onclick="document.getElementById('date-converter-modal').classList.remove('active')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-intro">تاریخ شمسی را وارد کنید تا معادل میلادی و قمری آن محاسبه شود:</p>
+        <div class="converter-inputs-row">
+          <div class="form-group">
+            <label>روز</label>
+            <input type="number" id="conv-jd" min="1" max="31" class="modal-input" oninput="CalendarUI.updateConvertedDates()">
+          </div>
+          <div class="form-group">
+            <label>ماه</label>
+            <select id="conv-jm" class="modal-input" onchange="CalendarUI.updateConvertedDates()">
+              <option value="1">فروردین</option>
+              <option value="2">اردیبهشت</option>
+              <option value="3">خرداد</option>
+              <option value="4">تیر</option>
+              <option value="5">مرداد</option>
+              <option value="6">شهریور</option>
+              <option value="7">مهر</option>
+              <option value="8">آبان</option>
+              <option value="9">آذر</option>
+              <option value="10">دی</option>
+              <option value="11">بهمن</option>
+              <option value="12">اسفند</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>سال</label>
+            <input type="number" id="conv-jy" min="1300" max="1500" class="modal-input" oninput="CalendarUI.updateConvertedDates()">
+          </div>
+        </div>
+
+        <div class="converter-result-box">
+          <div class="result-row">
+            <span>تاریخ شمسی:</span>
+            <strong id="conv-res-persian">-</strong>
+          </div>
+          <div class="result-row accent">
+            <span>معادل میلادی:</span>
+            <strong id="conv-res-gregorian">-</strong>
+          </div>
+          <div class="result-row">
+            <span>معادل قمری:</span>
+            <strong id="conv-res-hijri">-</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Add/Edit Shortcut Modal (Requirement 3) -->
+  <div id="shortcut-modal" class="custom-modal-overlay">
+    <div id="shortcut-modal-backdrop" class="modal-backdrop"></div>
+    <div class="modal-card glass-modal-card">
+      <div class="modal-header">
+        <h3 id="sc-modal-title" class="modal-title">افزودن میانبر جدید</h3>
+        <button id="shortcut-modal-close" class="modal-close-btn">✕</button>
+      </div>
+      <form id="shortcut-form" class="modal-body">
+        <input type="hidden" id="sc-edit-id" value="">
+        
+        <div class="form-group">
+          <label>نام میانبر (مثلاً: یوتیوب، ورزش ۳)</label>
+          <input type="text" id="sc-title-input" class="modal-input" placeholder="عنوان سایت..." required>
+        </div>
+
+        <div class="form-group">
+          <label>آدرس سایت (URL)</label>
+          <div class="input-with-preview">
+            <input type="url" id="sc-url-input" class="modal-input" placeholder="https://example.com" required>
+            <div id="sc-icon-preview" class="icon-preview-bubble">🌐</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>رنگ پس‌زمینه کارت</label>
+          <div class="color-options-row">
+            <input type="color" id="sc-color-input" value="#0284c7" class="color-picker-input">
+            <span class="color-hint">می‌توانید رنگ آیکون دلخواه خود را تعیین کنید</span>
+          </div>
+        </div>
+
+        <div class="modal-actions-row">
+          <button type="submit" class="btn-primary-action">ذخیره میانبر</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. Add To-Do Modal -->
+  <div id="todo-modal" class="custom-modal-overlay">
+    <div id="todo-modal-backdrop" class="modal-backdrop"></div>
+    <div class="modal-card glass-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">نوشتن کار جدید در دست‌نویس</h3>
+        <button id="todo-modal-close" class="modal-close-btn">✕</button>
+      </div>
+      <form id="todo-form" class="modal-body">
+        <div class="form-group">
+          <label>عنوان کار</label>
+          <input type="text" id="td-title-input" class="modal-input" placeholder="مثلاً: تبریک تولد حسام..." required>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>دسته‌بندی / برچسب</label>
+            <input type="text" id="td-tag-input" class="modal-input" placeholder="تولد، کار، دانشگاه...">
+          </div>
+          <div class="form-group">
+            <label>زمان یا مهلت</label>
+            <input type="text" id="td-date-input" class="modal-input" placeholder="امروز، ۲۹ خرداد...">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>توضیحات و جزئیات دست‌نویس</label>
+          <textarea id="td-desc-input" rows="3" class="modal-input modal-textarea" placeholder="یادداشت‌های بیشتر..."></textarea>
+        </div>
+        <div class="modal-actions-row">
+          <button type="submit" class="btn-primary-action">ثبت یادداشت</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. Prayer Times Modal (اوقات شرعی) -->
+  <div id="prayer-modal" class="custom-modal-overlay">
+    <div id="prayer-modal-backdrop" class="modal-backdrop"></div>
+    <div class="modal-card glass-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">اوقات شرعی امروز</h3>
+        <button id="prayer-modal-close" class="modal-close-btn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="prayer-times-grid">
+          <div class="prayer-box">
+            <span class="prayer-name">اذان صبح</span>
+            <strong id="pt-fajr" class="prayer-val">--:--</strong>
+          </div>
+          <div class="prayer-box">
+            <span class="prayer-name">طلوع آفتاب</span>
+            <strong id="pt-sunrise" class="prayer-val">--:--</strong>
+          </div>
+          <div class="prayer-box accent">
+            <span class="prayer-name">اذان ظهر</span>
+            <strong id="pt-dhuhr" class="prayer-val">--:--</strong>
+          </div>
+          <div class="prayer-box">
+            <span class="prayer-name">غروب آفتاب</span>
+            <strong id="pt-sunset" class="prayer-val">--:--</strong>
+          </div>
+          <div class="prayer-box accent">
+            <span class="prayer-name">اذان مغرب</span>
+            <strong id="pt-maghrib" class="prayer-val">--:--</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Settings & Wallpapers Modal -->
+  <div id="settings-modal" class="custom-modal-overlay">
+    <div id="settings-modal-backdrop" class="modal-backdrop"></div>
+    <div class="modal-card glass-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">تنظیمات و شخصی‌سازی دست‌نویس</h3>
+        <button id="settings-modal-close" class="modal-close-btn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-section">
+          <h4 class="settings-section-title">انتخاب تصویر پس‌زمینه (Wallpaper)</h4>
+          <div class="wallpapers-grid">
+            <button class="wallpaper-thumb-option" data-wp="assets/images/bg-nature.jpg">
+              <img src="assets/images/bg-nature.jpg" alt="طبیعت جیبلی">
+              <span>طبیعت جیبلی (پیش‌فرض)</span>
+            </button>
+            <button class="wallpaper-thumb-option" data-wp="assets/images/bg-night.jpg">
+              <img src="assets/images/bg-night.jpg" alt="شب پر ستاره">
+              <span>شب پرستاره و کلبه</span>
+            </button>
+            <button class="wallpaper-thumb-option" data-wp="assets/images/bg-sunset.jpg">
+              <img src="assets/images/bg-sunset.jpg" alt="غروب دل‌انگیز">
+              <span>غروب طلایی دشت</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h4 class="settings-section-title">تنظیمات اعداد و نمایش</h4>
+          <label class="setting-toggle-row">
+            <span>استفاده از اعداد فارسی (۱۲۳ به جای 123)</span>
+            <input type="checkbox" id="toggle-persian-digits" checked class="custom-toggle">
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="js/jalali.js"></script>
+  <script src="js/weather.js"></script>
+  <script src="js/shortcuts.js"></script>
+  <script src="js/todo.js"></script>
+  <script src="js/music.js"></script>
+  <script src="js/calendar-ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

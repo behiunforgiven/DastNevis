@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "دست‌نویس | Dastnevis - تقویم و تب جدید فارسی",
+  "version": "1.0.0",
+  "description": "صفحه تب جدید زیبا با تقویم شمسی هوشمند، نمایش تاریخ میلادی، وضعیت آب‌وهوا، میانبرهای دلخواه و یادداشت‌ها",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "48": "assets/icons/icon48.png",
+      "128": "assets/icons/icon128.png"
+    },
+    "default_title": "دست‌نویس"
+  },
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  }
+}
