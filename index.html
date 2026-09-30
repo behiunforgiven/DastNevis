@@ -338,35 +338,140 @@
     </div>
   </div>
 
-  <!-- 3. Add/Edit Shortcut Modal (Requirement 3) -->
+  <!-- 3. Add/Edit Shortcut Modal (Customizable Icons & Multi-Source Favicons) -->
   <div id="shortcut-modal" class="custom-modal-overlay">
     <div id="shortcut-modal-backdrop" class="modal-backdrop"></div>
-    <div class="modal-card glass-modal-card">
+    <div class="modal-card glass-modal-card shortcut-modal-card">
       <div class="modal-header">
         <h3 id="sc-modal-title" class="modal-title">افزودن میانبر جدید</h3>
-        <button id="shortcut-modal-close" class="modal-close-btn">✕</button>
+        <button id="shortcut-modal-close" class="modal-close-btn" type="button">✕</button>
       </div>
-      <form id="shortcut-form" class="modal-body">
+      <form id="shortcut-form" class="modal-body sc-modal-body">
         <input type="hidden" id="sc-edit-id" value="">
+        <input type="hidden" id="sc-icontype-val" value="favicon">
+        <input type="hidden" id="sc-preset-val" value="">
+        <input type="hidden" id="sc-custom-val" value="">
+
+        <!-- Live Preview of Shortcut Card -->
+        <div class="sc-live-preview-box">
+          <div class="shortcut-item preview-item">
+            <div id="sc-card-preview-btn" class="shortcut-icon-btn" style="--sc-bg: #0284c7;">
+              <div id="sc-icon-preview" class="shortcut-icon-wrap">🌐</div>
+            </div>
+            <span id="sc-preview-title" class="shortcut-label">عنوان میانبر</span>
+          </div>
+          <div class="sc-preview-info">
+            <span class="sc-preview-heading">پیش‌نمایش میانبر</span>
+            <span class="sc-preview-hint">ظاهر آیکون و رنگ پس‌زمینه کارت در تب جدید</span>
+          </div>
+        </div>
         
         <div class="form-group">
-          <label>نام میانبر (مثلاً: یوتیوب، ورزش ۳)</label>
-          <input type="text" id="sc-title-input" class="modal-input" placeholder="عنوان سایت..." required>
+          <label>نام میانبر (عنوان)</label>
+          <input type="text" id="sc-title-input" class="modal-input" placeholder="مثلاً: یوتیوب، ورزش ۳، گیت‌هاب..." required>
         </div>
 
         <div class="form-group">
           <label>آدرس سایت (URL)</label>
-          <div class="input-with-preview">
-            <input type="url" id="sc-url-input" class="modal-input" placeholder="https://example.com" required>
-            <div id="sc-icon-preview" class="icon-preview-bubble">🌐</div>
+          <input type="url" id="sc-url-input" class="modal-input" placeholder="https://example.com" required>
+        </div>
+
+        <!-- Custom Icon Selector with Tabs -->
+        <div class="form-group">
+          <label>انتخاب نوع آیکون میانبر</label>
+          <div class="sc-icon-type-tabs">
+            <button type="button" class="sc-tab-btn active" data-type="favicon">
+              <span class="sc-tab-icon">🌐</span>
+              <span>فاوآیکون خودکار</span>
+            </button>
+            <button type="button" class="sc-tab-btn" data-type="preset">
+              <span class="sc-tab-icon">✨</span>
+              <span>آیکون آماده</span>
+            </button>
+            <button type="button" class="sc-tab-btn" data-type="emoji">
+              <span class="sc-tab-icon">😀</span>
+              <span>ایموجی</span>
+            </button>
+            <button type="button" class="sc-tab-btn" data-type="custom">
+              <span class="sc-tab-icon">🖼️</span>
+              <span>تصویر دلخواه</span>
+            </button>
+          </div>
+
+          <!-- Tab 1: Favicon Panel -->
+          <div id="sc-panel-favicon" class="sc-icon-panel active">
+            <p class="sc-panel-desc">
+              فاوآیکون به صورت چندمرحله‌ای (از حافظه کروم، داک‌داک‌گو، گوگل و آیکون اصلی سایت) دریافت می‌شود.
+            </p>
+            <button type="button" id="sc-btn-refresh-fav" class="sc-secondary-btn">
+              🔄 بررسی و بارگذاری مجدد آیکون
+            </button>
+          </div>
+
+          <!-- Tab 2: Preset SVGs Panel -->
+          <div id="sc-panel-preset" class="sc-icon-panel">
+            <p class="sc-panel-desc">یک آیکون آماده از میان سرویس‌های پرکاربرد انتخاب کنید:</p>
+            <div id="sc-presets-grid" class="sc-presets-grid">
+              <!-- Injected by app.js from Shortcuts.PRESET_ITEMS -->
+            </div>
+          </div>
+
+          <!-- Tab 3: Emoji Panel -->
+          <div id="sc-panel-emoji" class="sc-icon-panel">
+            <div class="sc-emoji-input-row">
+              <input type="text" id="sc-emoji-input" class="modal-input sc-emoji-input" placeholder="ایموجی دلخواه (یا یکی را از زیر کلیک کنید)..." maxlength="5">
+            </div>
+            <div id="sc-emoji-chips" class="sc-emoji-quick-grid">
+              <button type="button" class="emoji-chip">💻</button>
+              <button type="button" class="emoji-chip">📱</button>
+              <button type="button" class="emoji-chip">🚀</button>
+              <button type="button" class="emoji-chip">⚽</button>
+              <button type="button" class="emoji-chip">🎵</button>
+              <button type="button" class="emoji-chip">🎬</button>
+              <button type="button" class="emoji-chip">📚</button>
+              <button type="button" class="emoji-chip">🛒</button>
+              <button type="button" class="emoji-chip">🎮</button>
+              <button type="button" class="emoji-chip">💼</button>
+              <button type="button" class="emoji-chip">💡</button>
+              <button type="button" class="emoji-chip">🌐</button>
+              <button type="button" class="emoji-chip">📌</button>
+              <button type="button" class="emoji-chip">✉️</button>
+              <button type="button" class="emoji-chip">📰</button>
+              <button type="button" class="emoji-chip">💰</button>
+              <button type="button" class="emoji-chip">☕</button>
+              <button type="button" class="emoji-chip">🔥</button>
+            </div>
+          </div>
+
+          <!-- Tab 4: Custom Image Panel (Upload File or URL) -->
+          <div id="sc-panel-custom" class="sc-icon-panel">
+            <div class="sc-custom-upload-box">
+              <label for="sc-file-input" class="sc-file-label">
+                <span class="upload-icon">📁</span>
+                <span>آپلود تصویر آیکون از کامپیوتر (PNG, JPG, SVG, WebP)</span>
+              </label>
+              <input type="file" id="sc-file-input" accept="image/*" class="sc-hidden-file-input">
+            </div>
+            <div class="sc-divider-text">یا وارد کردن لینک مستقیم تصویر:</div>
+            <input type="url" id="sc-custom-url-input" class="modal-input" placeholder="https://example.com/logo.png">
           </div>
         </div>
 
+        <!-- Card Background Color -->
         <div class="form-group">
-          <label>رنگ پس‌زمینه کارت</label>
+          <label>رنگ پس‌زمینه کارت میانبر</label>
           <div class="color-options-row">
             <input type="color" id="sc-color-input" value="#0284c7" class="color-picker-input">
-            <span class="color-hint">می‌توانید رنگ آیکون دلخواه خود را تعیین کنید</span>
+            <div class="quick-color-dots">
+              <button type="button" class="color-dot" data-color="#0284c7" style="background:#0284c7;" title="آبی"></button>
+              <button type="button" class="color-dot" data-color="#dc2626" style="background:#dc2626;" title="قرمز"></button>
+              <button type="button" class="color-dot" data-color="#059669" style="background:#059669;" title="سبز زمردی"></button>
+              <button type="button" class="color-dot" data-color="#8b5cf6" style="background:#8b5cf6;" title="بنفش"></button>
+              <button type="button" class="color-dot" data-color="#ec4899" style="background:#ec4899;" title="صورتی"></button>
+              <button type="button" class="color-dot" data-color="#f59e0b" style="background:#f59e0b;" title="کهربایی"></button>
+              <button type="button" class="color-dot" data-color="#0ea5e9" style="background:#0ea5e9;" title="آبی فیروزه‌ای"></button>
+              <button type="button" class="color-dot" data-color="#334155" style="background:#334155;" title="خاکستری"></button>
+            </div>
           </div>
         </div>
 

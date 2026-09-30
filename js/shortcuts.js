@@ -69,8 +69,31 @@ const Shortcuts = (() => {
     github: `<svg viewBox="0 0 24 24" width="26" height="26" fill="white"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>`,
     google: `<svg viewBox="0 0 24 24" width="24" height="24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>`,
     telegram: `<svg viewBox="0 0 24 24" width="26" height="26" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.196 1.006.128.832.942z"/></svg>`,
-    instagram: `<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`
+    instagram: `<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`,
+    code: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+    music: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
+    mail: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
+    book: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+    globe: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`
   };
+
+  const PRESET_ITEMS = [
+    { key: 'google', name: 'گوگل', color: '#4285F4' },
+    { key: 'youtube', name: 'یوتیوب', color: '#dc2626' },
+    { key: 'twitter', name: 'توییتر / X', color: '#0ea5e9' },
+    { key: 'telegram', name: 'تلگرام', color: '#0284c7' },
+    { key: 'instagram', name: 'اینستاگرام', color: '#e1306c' },
+    { key: 'github', name: 'گیت‌هاب', color: '#24292e' },
+    { key: 'ai', name: 'هوش مصنوعی', color: '#8b5cf6' },
+    { key: 'notion', name: 'نوشن', color: '#334155' },
+    { key: 'finance', name: 'مالی / بورس', color: '#059669' },
+    { key: 'store', name: 'فروشگاه', color: '#ec4899' },
+    { key: 'code', name: 'کدنویسی', color: '#0284c7' },
+    { key: 'music', name: 'موسیقی', color: '#f59e0b' },
+    { key: 'mail', name: 'ایمیل', color: '#ef4444' },
+    { key: 'book', name: 'مطالعه', color: '#10b981' },
+    { key: 'globe', name: 'وبسایت', color: '#6366f1' }
+  ];
 
   /**
    * Loads shortcuts from Chrome storage or fallback localStorage
@@ -121,11 +144,16 @@ const Shortcuts = (() => {
   }
 
   /**
-   * Extracts favicon URL using Google's Favicon Service
+   * Extracts primary favicon URL using Chrome native _favicon API or Google Favicon Service
    */
   function getFaviconUrl(url) {
     try {
       const u = new URL(url.startsWith('http') ? url : `https://${url}`);
+      // Priority 1: Chrome Extension Native Favicon API (requires "favicon" permission in manifest)
+      if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id) {
+        return `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(u.href)}&size=64`;
+      }
+      // Priority 2: Google S2 Favicon API
       return `https://www.google.com/s2/favicons?domain=${u.hostname}&sz=64`;
     } catch {
       return '';
@@ -133,7 +161,47 @@ const Shortcuts = (() => {
   }
 
   /**
-   * Renders shortcut icon based on type
+   * Robust Multi-Source Favicon Fallback Handler:
+   * 1. Chrome _favicon -> 2. Google S2 -> 3. DuckDuckGo -> 4. Direct /favicon.ico -> 5. Globe Emoji
+   */
+  function handleFaviconError(imgElement, encodedUrl) {
+    try {
+      const rawUrl = decodeURIComponent(encodedUrl || '');
+      if (!rawUrl) {
+        fallbackToGlobe(imgElement);
+        return;
+      }
+      const u = new URL(rawUrl.startsWith('http') ? rawUrl : `https://${rawUrl}`);
+      const currentSrc = imgElement.src || '';
+
+      if (currentSrc.includes('_favicon')) {
+        // Fallback 1: Google S2
+        imgElement.src = `https://www.google.com/s2/favicons?domain=${u.hostname}&sz=64`;
+      } else if (currentSrc.includes('google.com/s2/favicons')) {
+        // Fallback 2: DuckDuckGo icons
+        imgElement.src = `https://icons.duckduckgo.com/ip3/${u.hostname}.ico`;
+      } else if (currentSrc.includes('duckduckgo.com')) {
+        // Fallback 3: Direct website favicon
+        imgElement.src = `${u.origin}/favicon.ico`;
+      } else {
+        // Fallback 4: Fallback to globe icon
+        fallbackToGlobe(imgElement);
+      }
+    } catch {
+      fallbackToGlobe(imgElement);
+    }
+  }
+
+  function fallbackToGlobe(imgElement) {
+    imgElement.onerror = null;
+    const parent = imgElement.parentElement;
+    if (parent) {
+      parent.innerHTML = '<span class="shortcut-emoji">🌐</span>';
+    }
+  }
+
+  /**
+   * Renders shortcut icon based on type (preset, emoji, custom image, or favicon)
    */
   function renderShortcutIcon(sc) {
     if (sc.iconType === 'preset' && PRESET_SVGS[sc.iconKey]) {
@@ -142,17 +210,23 @@ const Shortcuts = (() => {
     if (sc.iconType === 'emoji') {
       return `<span class="shortcut-emoji">${sc.emoji || '🔗'}</span>`;
     }
-    // Favicon mode
+    if (sc.iconType === 'custom' && sc.customIcon) {
+      return `<img class="shortcut-favicon custom-uploaded-icon" src="${sc.customIcon}" alt="${sc.title || ''}" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\\'shortcut-emoji\\'>🔗</span>'"/>`;
+    }
+    // Favicon mode (default)
     const favUrl = sc.faviconUrl || getFaviconUrl(sc.url);
-    return `<img class="shortcut-favicon" src="${favUrl}" alt="${sc.title}" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\\'shortcut-emoji\\'>🌐</span>'"/>`;
+    const safeUrl = encodeURIComponent(sc.url || '');
+    return `<img class="shortcut-favicon" src="${favUrl}" alt="${sc.title || ''}" onerror="Shortcuts.handleFaviconError(this, '${safeUrl}')"/>`;
   }
 
   return {
     DEFAULT_SHORTCUTS,
     PRESET_SVGS,
+    PRESET_ITEMS,
     loadShortcuts,
     saveShortcuts,
     getFaviconUrl,
+    handleFaviconError,
     renderShortcutIcon
   };
 })();

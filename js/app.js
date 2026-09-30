@@ -191,6 +191,11 @@ const App = (() => {
   }
 
   /* ------------------- SHORTCUTS ------------------- */
+  let currentScIconType = 'favicon';
+  let currentScPresetKey = '';
+  let currentScEmoji = '🌐';
+  let currentScCustomData = '';
+
   async function initShortcuts() {
     shortcutsList = await Shortcuts.loadShortcuts();
     renderShortcuts();
@@ -199,56 +204,160 @@ const App = (() => {
     const modalClose = document.getElementById('shortcut-modal-close');
     const modalBackdrop = document.getElementById('shortcut-modal-backdrop');
     const form = document.getElementById('shortcut-form');
+    const titleInput = document.getElementById('sc-title-input');
     const urlInput = document.getElementById('sc-url-input');
+    const colorInput = document.getElementById('sc-color-input');
+    const emojiInput = document.getElementById('sc-emoji-input');
+    const fileInput = document.getElementById('sc-file-input');
+    const customUrlInput = document.getElementById('sc-custom-url-input');
+    const refreshFavBtn = document.getElementById('sc-btn-refresh-fav');
 
     if (modalClose) modalClose.addEventListener('click', closeShortcutModal);
     if (modalBackdrop) modalBackdrop.addEventListener('click', (e) => {
       if (e.target === modalBackdrop) closeShortcutModal();
     });
 
+    // Populate preset SVG buttons
+    renderPresetIconsGrid();
+
+    // Setup icon type tabs
+    const tabButtons = document.querySelectorAll('.sc-tab-btn');
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.getAttribute('data-type');
+        switchShortcutIconTab(type);
+      });
+    });
+
+    // Live preview listeners
+    if (titleInput) {
+      titleInput.addEventListener('input', () => {
+        const label = document.getElementById('sc-preview-title');
+        if (label) label.textContent = titleInput.value.trim() || 'عنوان میانبر';
+      });
+    }
+
     if (urlInput) {
       urlInput.addEventListener('input', () => {
-        const val = urlInput.value.trim();
-        const preview = document.getElementById('sc-icon-preview');
-        if (val.length > 3) {
-          const fav = Shortcuts.getFaviconUrl(val);
-          preview.innerHTML = `<img src="${fav}" alt="icon" onerror="this.parentElement.innerHTML='🌐'"/>`;
+        if (currentScIconType === 'favicon') {
+          updateShortcutLivePreview();
         }
       });
     }
 
+    if (colorInput) {
+      colorInput.addEventListener('input', () => {
+        const cardBtn = document.getElementById('sc-card-preview-btn');
+        if (cardBtn) cardBtn.style.setProperty('--sc-bg', colorInput.value);
+      });
+    }
+
+    // Quick color dots
+    document.querySelectorAll('.quick-color-dots .color-dot').forEach(dot => {
+      dot.addEventListener('click', () => {
+        const color = dot.getAttribute('data-color');
+        if (colorInput) colorInput.value = color;
+        const cardBtn = document.getElementById('sc-card-preview-btn');
+        if (cardBtn) cardBtn.style.setProperty('--sc-bg', color);
+      });
+    });
+
+    // Emoji input & quick emoji chips
+    if (emojiInput) {
+      emojiInput.addEventListener('input', () => {
+        currentScEmoji = emojiInput.value.trim() || '🌐';
+        updateShortcutLivePreview();
+      });
+    }
+
+    document.querySelectorAll('#sc-emoji-chips .emoji-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        currentScEmoji = chip.textContent.trim();
+        if (emojiInput) emojiInput.value = currentScEmoji;
+        updateShortcutLivePreview();
+      });
+    });
+
+    // Custom image file upload
+    if (fileInput) {
+      fileInput.addEventListener('change', async (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+          try {
+            currentScCustomData = await processUploadedIcon(file);
+            document.getElementById('sc-custom-val').value = currentScCustomData;
+            if (customUrlInput) customUrlInput.value = '';
+            updateShortcutLivePreview();
+          } catch (err) {
+            console.error('Error processing icon image:', err);
+          }
+        }
+      });
+    }
+
+    // Custom direct image URL
+    if (customUrlInput) {
+      customUrlInput.addEventListener('input', () => {
+        const val = customUrlInput.value.trim();
+        if (val) {
+          currentScCustomData = val;
+          document.getElementById('sc-custom-val').value = val;
+          updateShortcutLivePreview();
+        }
+      });
+    }
+
+    // Refresh Favicon button
+    if (refreshFavBtn) {
+      refreshFavBtn.addEventListener('click', () => {
+        updateShortcutLivePreview(true);
+      });
+    }
+
+    // Form submission
     if (form) {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const editId = document.getElementById('sc-edit-id').value;
-        const title = document.getElementById('sc-title-input').value.trim() || 'سایت';
-        const url = document.getElementById('sc-url-input').value.trim();
-        const color = document.getElementById('sc-color-input').value || '#38bdf8';
+        const title = (document.getElementById('sc-title-input').value || '').trim() || 'سایت';
+        const url = (document.getElementById('sc-url-input').value || '').trim();
+        const color = (document.getElementById('sc-color-input').value || '').trim() || '#0284c7';
 
         if (!url) return;
-        const fullUrl = url.startsWith('http') ? url : `https://${url}`;
+        const fullUrl = url.startsWith('http://') || url.startsWith('https://') ? url : `https://${url}`;
+
+        const shortcutData = {
+          title,
+          url: fullUrl,
+          bgColor: color,
+          iconType: currentScIconType
+        };
+
+        if (currentScIconType === 'preset') {
+          shortcutData.iconKey = currentScPresetKey || 'globe';
+        } else if (currentScIconType === 'emoji') {
+          shortcutData.emoji = currentScEmoji || '🔗';
+        } else if (currentScIconType === 'custom') {
+          shortcutData.customIcon = currentScCustomData || '';
+        } else {
+          // favicon
+          shortcutData.faviconUrl = Shortcuts.getFaviconUrl(fullUrl);
+        }
 
         if (editId) {
-          // Update
+          // Update existing
           const idx = shortcutsList.findIndex(s => s.id === editId);
           if (idx !== -1) {
             shortcutsList[idx] = {
               ...shortcutsList[idx],
-              title,
-              url: fullUrl,
-              bgColor: color,
-              faviconUrl: Shortcuts.getFaviconUrl(fullUrl)
+              ...shortcutData
             };
           }
         } else {
           // Add new
           shortcutsList.push({
             id: 'sc-' + Date.now(),
-            title,
-            url: fullUrl,
-            iconType: 'favicon',
-            faviconUrl: Shortcuts.getFaviconUrl(fullUrl),
-            bgColor: color
+            ...shortcutData
           });
         }
 
@@ -256,6 +365,143 @@ const App = (() => {
         renderShortcuts();
         closeShortcutModal();
       });
+    }
+  }
+
+  /**
+   * Scales and optimizes uploaded images to small data URLs so storage isn't overloaded
+   */
+  function processUploadedIcon(file) {
+    return new Promise((resolve, reject) => {
+      if (!file) return reject(new Error('فایلی انتخاب نشده است'));
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        if (file.type === 'image/svg+xml') {
+          resolve(dataUrl);
+          return;
+        }
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 96;
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/png'));
+        };
+        img.onerror = () => resolve(dataUrl);
+        img.src = dataUrl;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function renderPresetIconsGrid() {
+    const grid = document.getElementById('sc-presets-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    (Shortcuts.PRESET_ITEMS || []).forEach(item => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `sc-preset-btn ${currentScPresetKey === item.key ? 'active' : ''}`;
+      btn.dataset.key = item.key;
+      btn.dataset.color = item.color;
+      btn.title = item.name;
+
+      btn.innerHTML = `
+        <div class="preset-icon-wrap" style="background:${item.color};">
+          ${Shortcuts.PRESET_SVGS[item.key] || '✨'}
+        </div>
+        <span class="preset-name">${item.name}</span>
+      `;
+
+      btn.addEventListener('click', () => {
+        currentScPresetKey = item.key;
+        document.getElementById('sc-preset-val').value = item.key;
+        
+        // Auto-suggest preset theme color if color hasn't been deliberately customized
+        const colorInput = document.getElementById('sc-color-input');
+        if (colorInput && item.color) {
+          colorInput.value = item.color;
+          const cardBtn = document.getElementById('sc-card-preview-btn');
+          if (cardBtn) cardBtn.style.setProperty('--sc-bg', item.color);
+        }
+
+        document.querySelectorAll('.sc-preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        updateShortcutLivePreview();
+      });
+
+      grid.appendChild(btn);
+    });
+  }
+
+  function switchShortcutIconTab(type) {
+    currentScIconType = type;
+    document.getElementById('sc-icontype-val').value = type;
+
+    // Update active tab buttons
+    document.querySelectorAll('.sc-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-type') === type);
+    });
+
+    // Update active panels
+    document.querySelectorAll('.sc-icon-panel').forEach(panel => {
+      panel.classList.toggle('active', panel.id === `sc-panel-${type}`);
+    });
+
+    updateShortcutLivePreview();
+  }
+
+  function updateShortcutLivePreview(forceReloadFav = false) {
+    const previewWrap = document.getElementById('sc-icon-preview');
+    const cardBtn = document.getElementById('sc-card-preview-btn');
+    const colorInput = document.getElementById('sc-color-input');
+    const urlInput = document.getElementById('sc-url-input');
+
+    if (cardBtn && colorInput) {
+      cardBtn.style.setProperty('--sc-bg', colorInput.value || '#0284c7');
+    }
+
+    if (!previewWrap) return;
+
+    if (currentScIconType === 'preset') {
+      const svg = Shortcuts.PRESET_SVGS[currentScPresetKey] || Shortcuts.PRESET_SVGS['globe'];
+      previewWrap.innerHTML = svg;
+    } else if (currentScIconType === 'emoji') {
+      previewWrap.innerHTML = `<span class="shortcut-emoji">${currentScEmoji || '🔗'}</span>`;
+    } else if (currentScIconType === 'custom') {
+      if (currentScCustomData) {
+        previewWrap.innerHTML = `<img class="shortcut-favicon" src="${currentScCustomData}" alt="icon" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\\'shortcut-emoji\\'>🖼️</span>'"/>`;
+      } else {
+        previewWrap.innerHTML = `<span class="shortcut-emoji">🖼️</span>`;
+      }
+    } else {
+      // Favicon
+      const rawUrl = urlInput ? urlInput.value.trim() : '';
+      if (rawUrl && rawUrl.length > 3) {
+        const fullUrl = rawUrl.startsWith('http') ? rawUrl : `https://${rawUrl}`;
+        const favUrl = Shortcuts.getFaviconUrl(fullUrl) + (forceReloadFav ? `&_t=${Date.now()}` : '');
+        previewWrap.innerHTML = `<img class="shortcut-favicon" src="${favUrl}" alt="favicon" onerror="Shortcuts.handleFaviconError(this, '${encodeURIComponent(fullUrl)}')"/>`;
+      } else {
+        previewWrap.innerHTML = `<span class="shortcut-emoji">🌐</span>`;
+      }
     }
   }
 
@@ -318,7 +564,18 @@ const App = (() => {
     document.getElementById('sc-edit-id').value = '';
     document.getElementById('sc-title-input').value = '';
     document.getElementById('sc-url-input').value = '';
-    document.getElementById('sc-icon-preview').innerHTML = '🌐';
+    document.getElementById('sc-color-input').value = '#0284c7';
+    document.getElementById('sc-preview-title').textContent = 'پیش‌نمایش میانبر';
+
+    currentScIconType = 'favicon';
+    currentScPresetKey = '';
+    currentScEmoji = '🌐';
+    currentScCustomData = '';
+    document.getElementById('sc-emoji-input').value = '';
+    document.getElementById('sc-custom-url-input').value = '';
+    document.getElementById('sc-custom-val').value = '';
+
+    switchShortcutIconTab('favicon');
     document.getElementById('shortcut-modal').classList.add('active');
   }
 
@@ -327,8 +584,25 @@ const App = (() => {
     document.getElementById('sc-edit-id').value = sc.id;
     document.getElementById('sc-title-input').value = sc.title;
     document.getElementById('sc-url-input').value = sc.url;
-    document.getElementById('sc-color-input').value = sc.bgColor || '#38bdf8';
-    document.getElementById('sc-icon-preview').innerHTML = Shortcuts.renderShortcutIcon(sc);
+    document.getElementById('sc-color-input').value = sc.bgColor || '#0284c7';
+    document.getElementById('sc-preview-title').textContent = sc.title;
+
+    currentScIconType = sc.iconType || 'favicon';
+    currentScPresetKey = sc.iconKey || '';
+    currentScEmoji = sc.emoji || '🌐';
+    currentScCustomData = sc.customIcon || '';
+
+    document.getElementById('sc-preset-val').value = currentScPresetKey;
+    document.getElementById('sc-emoji-input').value = sc.emoji || '';
+    document.getElementById('sc-custom-val').value = currentScCustomData;
+    document.getElementById('sc-custom-url-input').value = (currentScCustomData.startsWith('http') ? currentScCustomData : '');
+
+    // Highlight active preset button if applicable
+    document.querySelectorAll('.sc-preset-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.key === currentScPresetKey);
+    });
+
+    switchShortcutIconTab(currentScIconType);
     document.getElementById('shortcut-modal').classList.add('active');
   }
 
