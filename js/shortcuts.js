@@ -96,6 +96,24 @@ const Shortcuts = (() => {
   ];
 
   /**
+   * Synchronously retrieves cached shortcuts for instant zero-latency UI rendering (0ms delay)
+   */
+  function getShortcutsSync() {
+    try {
+      const item = localStorage.getItem(STORAGE_KEY);
+      if (item) {
+        const parsed = JSON.parse(item);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch {
+      // fallback
+    }
+    return DEFAULT_SHORTCUTS;
+  }
+
+  /**
    * Loads shortcuts from Chrome storage or fallback localStorage
    */
   async function loadShortcuts() {
@@ -103,22 +121,16 @@ const Shortcuts = (() => {
       if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
         chrome.storage.local.get([STORAGE_KEY], (result) => {
           if (result && result[STORAGE_KEY] && Array.isArray(result[STORAGE_KEY]) && result[STORAGE_KEY].length > 0) {
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(result[STORAGE_KEY]));
+            } catch {}
             resolve(result[STORAGE_KEY]);
           } else {
-            resolve(DEFAULT_SHORTCUTS);
+            resolve(getShortcutsSync());
           }
         });
       } else {
-        try {
-          const item = localStorage.getItem(STORAGE_KEY);
-          if (item) {
-            resolve(JSON.parse(item));
-          } else {
-            resolve(DEFAULT_SHORTCUTS);
-          }
-        } catch {
-          resolve(DEFAULT_SHORTCUTS);
-        }
+        resolve(getShortcutsSync());
       }
     });
   }
@@ -127,17 +139,17 @@ const Shortcuts = (() => {
    * Saves shortcuts list
    */
   async function saveShortcuts(shortcutsList) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(shortcutsList));
+    } catch (e) {
+      console.error(e);
+    }
     return new Promise((resolve) => {
       if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
         chrome.storage.local.set({ [STORAGE_KEY]: shortcutsList }, () => {
           resolve(true);
         });
       } else {
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(shortcutsList));
-        } catch (e) {
-          console.error(e);
-        }
         resolve(true);
       }
     });
@@ -223,6 +235,7 @@ const Shortcuts = (() => {
     DEFAULT_SHORTCUTS,
     PRESET_SVGS,
     PRESET_ITEMS,
+    getShortcutsSync,
     loadShortcuts,
     saveShortcuts,
     getFaviconUrl,

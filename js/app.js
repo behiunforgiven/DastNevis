@@ -24,33 +24,36 @@ const App = (() => {
     chatgpt: { name: 'هوش مصنوعی', url: 'https://chatgpt.com/?q=' }
   };
 
-  async function init() {
+  function init() {
     loadSettings();
     applyWallpaper(userSettings.wallpaper);
 
-    // Initialize Clock & Date
+    // Initialize Global Modal Listeners (Backdrop click, Close buttons, Escape key)
+    initGlobalModalListeners();
+
+    // Initialize Clock & Date (Instant synchronous)
     initClock();
 
-    // Initialize Weather & Events
-    await initWeather();
-
-    // Initialize Calendar
+    // Initialize Calendar (Instant synchronous - 0ms delay!)
     CalendarUI.init();
 
-    // Initialize Shortcuts
-    await initShortcuts();
+    // Initialize Shortcuts (Instant synchronous render from cache, then background sync)
+    initShortcuts();
 
-    // Initialize To-Dos
-    await initTodos();
+    // Initialize To-Dos (Instant synchronous render from cache, then background sync)
+    initTodos();
 
-    // Initialize Music Player
+    // Initialize Music Player (Instant synchronous)
     initMusicPlayer();
 
-    // Initialize Search
+    // Initialize Search (Instant synchronous)
     initSearch();
 
-    // Initialize Sidebar & Modals
+    // Initialize Sidebar & Modals (Instant synchronous)
     initSidebarAndModals();
+
+    // Initialize Weather in background (Instant cache display, non-blocking network fetch)
+    initWeather();
   }
 
   /* ------------------- SETTINGS ------------------- */
@@ -154,9 +157,8 @@ const App = (() => {
 
     if (cityEl) cityEl.textContent = currentCity.name;
 
-    try {
-      const wData = await Weather.fetchWeather(currentCity);
-
+    function applyWeatherData(wData) {
+      if (!wData) return;
       if (tempEl) {
         tempEl.textContent = userSettings.usePersianDigits
           ? `${Jalali.toPersianDigits(wData.temp)}°`
@@ -178,13 +180,29 @@ const App = (() => {
       // Populate Prayer Times Modal
       if (wData.prayerTimes) {
         const pt = wData.prayerTimes;
-        document.getElementById('pt-fajr').textContent = userSettings.usePersianDigits ? Jalali.toPersianDigits(pt.fajr) : pt.fajr;
-        document.getElementById('pt-sunrise').textContent = userSettings.usePersianDigits ? Jalali.toPersianDigits(pt.sunrise) : pt.sunrise;
-        document.getElementById('pt-dhuhr').textContent = userSettings.usePersianDigits ? Jalali.toPersianDigits(pt.dhuhr) : pt.dhuhr;
-        document.getElementById('pt-sunset').textContent = userSettings.usePersianDigits ? Jalali.toPersianDigits(pt.sunset) : pt.sunset;
-        document.getElementById('pt-maghrib').textContent = userSettings.usePersianDigits ? Jalali.toPersianDigits(pt.maghrib) : pt.maghrib;
+        const fajrEl = document.getElementById('pt-fajr');
+        const sunriseEl = document.getElementById('pt-sunrise');
+        const dhuhrEl = document.getElementById('pt-dhuhr');
+        const sunsetEl = document.getElementById('pt-sunset');
+        const maghribEl = document.getElementById('pt-maghrib');
+        if (fajrEl) fajrEl.textContent = userSettings.usePersianDigits ? Jalali.toPersianDigits(pt.fajr) : pt.fajr;
+        if (sunriseEl) sunriseEl.textContent = userSettings.usePersianDigits ? Jalali.toPersianDigits(pt.sunrise) : pt.sunrise;
+        if (dhuhrEl) dhuhrEl.textContent = userSettings.usePersianDigits ? Jalali.toPersianDigits(pt.dhuhr) : pt.dhuhr;
+        if (sunsetEl) sunsetEl.textContent = userSettings.usePersianDigits ? Jalali.toPersianDigits(pt.sunset) : pt.sunset;
+        if (maghribEl) maghribEl.textContent = userSettings.usePersianDigits ? Jalali.toPersianDigits(pt.maghrib) : pt.maghrib;
       }
+    }
 
+    // 1. Instantly apply cached weather data if available (0ms delay!)
+    const cached = Weather.getCachedWeather(currentCity);
+    if (cached) {
+      applyWeatherData(cached);
+    }
+
+    // 2. Fetch fresh weather data in the background
+    try {
+      const wData = await Weather.fetchWeather(currentCity);
+      applyWeatherData(wData);
     } catch (e) {
       console.error('Weather load error:', e);
     }
@@ -197,8 +215,19 @@ const App = (() => {
   let currentScCustomData = '';
 
   async function initShortcuts() {
-    shortcutsList = await Shortcuts.loadShortcuts();
+    // Instant synchronous render (0ms delay)
+    shortcutsList = Shortcuts.getShortcutsSync();
     renderShortcuts();
+
+    // Non-blocking background sync with Chrome storage
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+      Shortcuts.loadShortcuts().then(stored => {
+        if (stored && JSON.stringify(stored) !== JSON.stringify(shortcutsList)) {
+          shortcutsList = stored;
+          renderShortcuts();
+        }
+      });
+    }
 
     const addShortcutModal = document.getElementById('shortcut-modal');
     const modalClose = document.getElementById('shortcut-modal-close');
@@ -212,10 +241,11 @@ const App = (() => {
     const customUrlInput = document.getElementById('sc-custom-url-input');
     const refreshFavBtn = document.getElementById('sc-btn-refresh-fav');
 
+    const cancelBtn = document.getElementById('sc-cancel-btn');
+
     if (modalClose) modalClose.addEventListener('click', closeShortcutModal);
-    if (modalBackdrop) modalBackdrop.addEventListener('click', (e) => {
-      if (e.target === modalBackdrop) closeShortcutModal();
-    });
+    if (cancelBtn) cancelBtn.addEventListener('click', closeShortcutModal);
+    if (modalBackdrop) modalBackdrop.addEventListener('click', closeShortcutModal);
 
     // Populate preset SVG buttons
     renderPresetIconsGrid();
@@ -612,8 +642,19 @@ const App = (() => {
 
   /* ------------------- TO-DOS ("دست نویس") ------------------- */
   async function initTodos() {
-    todosList = await Todo.loadTodos();
+    // Instant synchronous render (0ms delay)
+    todosList = Todo.getTodosSync();
     renderTodos();
+
+    // Non-blocking background sync with Chrome storage
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+      Todo.loadTodos().then(stored => {
+        if (stored && JSON.stringify(stored) !== JSON.stringify(todosList)) {
+          todosList = stored;
+          renderTodos();
+        }
+      });
+    }
 
     const addBtn = document.getElementById('btn-add-todo');
     const modal = document.getElementById('todo-modal');
@@ -621,11 +662,12 @@ const App = (() => {
     const modalBackdrop = document.getElementById('todo-modal-backdrop');
     const form = document.getElementById('todo-form');
 
+    const cancelBtn = document.getElementById('td-cancel-btn');
+
     if (addBtn) addBtn.addEventListener('click', () => openNewTaskModal());
     if (modalClose) modalClose.addEventListener('click', closeTodoModal);
-    if (modalBackdrop) modalBackdrop.addEventListener('click', (e) => {
-      if (e.target === modalBackdrop) closeTodoModal();
-    });
+    if (cancelBtn) cancelBtn.addEventListener('click', closeTodoModal);
+    if (modalBackdrop) modalBackdrop.addEventListener('click', closeTodoModal);
 
     if (form) {
       form.addEventListener('submit', async (e) => {
@@ -861,12 +903,54 @@ const App = (() => {
     }
   }
 
+  /* ------------------- GLOBAL UNIVERSAL MODAL SYSTEM ------------------- */
+  function initGlobalModalListeners() {
+    // 1. Close modal on backdrop or overlay click outside the card
+    document.querySelectorAll('.custom-modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay || e.target.classList.contains('modal-backdrop')) {
+          overlay.classList.remove('active');
+        }
+      });
+    });
+
+    // 2. Close modal on any close or cancel button click
+    document.addEventListener('click', (e) => {
+      const closeTarget = e.target.closest('.modal-close-btn, #sc-cancel-btn, #td-cancel-btn, [data-close-modal]');
+      if (closeTarget) {
+        e.preventDefault();
+        const activeModal = closeTarget.closest('.custom-modal-overlay');
+        if (activeModal) {
+          activeModal.classList.remove('active');
+        }
+      }
+    });
+
+    // 3. Escape key closes any currently active modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const activeModals = document.querySelectorAll('.custom-modal-overlay.active');
+        activeModals.forEach(m => m.classList.remove('active'));
+      }
+    });
+  }
+
   return {
     init,
-    openNewTaskModalWithDate: openNewTaskModal
+    openNewTaskModal,
+    openNewTaskModalWithDate: openNewTaskModal,
+    closeTodoModal,
+    openNewShortcutModal,
+    closeShortcutModal
   };
 })();
 
-document.addEventListener('DOMContentLoaded', () => {
+window.App = App;
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    App.init();
+  });
+} else {
   App.init();
-});
+}

@@ -216,6 +216,26 @@ const Weather = (() => {
   }
 
   /**
+   * Synchronously retrieves cached weather data if available (regardless of TTL expiration)
+   * to provide instantaneous 0ms display while fresh data loads in the background.
+   */
+  function getCachedWeather(city) {
+    const cacheKey = `weather_cache_${city.nameEn || city.name}`;
+    try {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed && parsed.data) {
+          return parsed.data;
+        }
+      }
+    } catch {
+      // Storage error fallback
+    }
+    return null;
+  }
+
+  /**
    * Fetches weather data with cache
    */
   async function fetchWeather(city) {
@@ -333,6 +353,7 @@ const Weather = (() => {
   return {
     DEFAULT_CITIES,
     fetchWeather,
+    getCachedWeather,
     getWeatherSvg,
     getWeatherComment,
     getPrayerTimes

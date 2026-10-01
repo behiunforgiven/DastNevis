@@ -8,6 +8,7 @@ const CalendarUI = (() => {
   let currentYear;
   let currentMonth;
   let selectedDayDetails = null;
+  let initialized = false;
 
   function init() {
     const today = Jalali.getToday();
@@ -16,7 +17,10 @@ const CalendarUI = (() => {
     selectedDayDetails = today;
 
     renderCalendar();
-    setupListeners();
+    if (!initialized) {
+      setupListeners();
+      initialized = true;
+    }
   }
 
   function setupListeners() {
@@ -64,17 +68,32 @@ const CalendarUI = (() => {
       });
     }
 
-    // Modal close events
+    // Day detail modal close events
     const modalClose = document.getElementById('day-modal-close');
     const modalBackdrop = document.getElementById('day-modal-backdrop');
     if (modalClose) {
       modalClose.addEventListener('click', closeDayModal);
     }
     if (modalBackdrop) {
-      modalBackdrop.addEventListener('click', (e) => {
-        if (e.target === modalBackdrop) closeDayModal();
-      });
+      modalBackdrop.addEventListener('click', closeDayModal);
     }
+
+    // Date converter modal close events & input listeners
+    const convClose = document.getElementById('date-converter-modal-close');
+    const convBackdrop = document.getElementById('date-converter-modal-backdrop');
+    if (convClose) {
+      convClose.addEventListener('click', closeConverterModal);
+    }
+    if (convBackdrop) {
+      convBackdrop.addEventListener('click', closeConverterModal);
+    }
+
+    const jyInput = document.getElementById('conv-jy');
+    const jmInput = document.getElementById('conv-jm');
+    const jdInput = document.getElementById('conv-jd');
+    if (jyInput) jyInput.addEventListener('input', updateConvertedDates);
+    if (jmInput) jmInput.addEventListener('change', updateConvertedDates);
+    if (jdInput) jdInput.addEventListener('input', updateConvertedDates);
   }
 
   function renderCalendar() {
@@ -203,6 +222,11 @@ const CalendarUI = (() => {
     if (modal) modal.classList.remove('active');
   }
 
+  function closeConverterModal() {
+    const convModal = document.getElementById('date-converter-modal');
+    if (convModal) convModal.classList.remove('active');
+  }
+
   /**
    * Converter Modal logic (تبدیل تاریخ)
    */
@@ -244,6 +268,7 @@ const CalendarUI = (() => {
     renderCalendar,
     showDayPopup,
     openConverterModal,
+    closeConverterModal,
     updateConvertedDates,
     closeDayModal
   };

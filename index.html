@@ -80,8 +80,8 @@
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
           <div class="calendar-titles">
-            <h2 id="cal-month-title" class="cal-month-name">شهریور ۱۴۰۱</h2>
-            <div id="cal-sub-title" class="cal-sub-info">ذی‌الحجه - ذی‌القعده ۱۴۴۳ | Aug - Sep 2022</div>
+            <h2 id="cal-month-title" class="cal-month-name">گاهشمار شمسی</h2>
+            <div id="cal-sub-title" class="cal-sub-info">در حال بارگذاری تقویم...</div>
           </div>
           <button id="cal-next-btn" class="cal-nav-btn" title="ماه بعد">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
@@ -238,7 +238,7 @@
     <div class="modal-card glass-modal-card">
       <div class="modal-header">
         <h3 class="modal-title">جزئیات و معادل تاریخ</h3>
-        <button id="day-modal-close" class="modal-close-btn">✕</button>
+        <button id="day-modal-close" class="modal-close-btn" type="button" title="بستن">✕</button>
       </div>
       <div class="modal-body">
         
@@ -284,22 +284,22 @@
 
   <!-- 2. Date Converter Modal (تبدیل تاریخ) -->
   <div id="date-converter-modal" class="custom-modal-overlay">
-    <div class="modal-backdrop" onclick="document.getElementById('date-converter-modal').classList.remove('active')"></div>
+    <div id="date-converter-modal-backdrop" class="modal-backdrop"></div>
     <div class="modal-card glass-modal-card">
       <div class="modal-header">
         <h3 class="modal-title">مبدل هوشمند تاریخ</h3>
-        <button class="modal-close-btn" onclick="document.getElementById('date-converter-modal').classList.remove('active')">✕</button>
+        <button id="date-converter-modal-close" class="modal-close-btn" type="button" title="بستن">✕</button>
       </div>
       <div class="modal-body">
         <p class="modal-intro">تاریخ شمسی را وارد کنید تا معادل میلادی و قمری آن محاسبه شود:</p>
         <div class="converter-inputs-row">
           <div class="form-group">
             <label>روز</label>
-            <input type="number" id="conv-jd" min="1" max="31" class="modal-input" oninput="CalendarUI.updateConvertedDates()">
+            <input type="number" id="conv-jd" min="1" max="31" class="modal-input">
           </div>
           <div class="form-group">
             <label>ماه</label>
-            <select id="conv-jm" class="modal-input" onchange="CalendarUI.updateConvertedDates()">
+            <select id="conv-jm" class="modal-input">
               <option value="1">فروردین</option>
               <option value="2">اردیبهشت</option>
               <option value="3">خرداد</option>
@@ -316,7 +316,7 @@
           </div>
           <div class="form-group">
             <label>سال</label>
-            <input type="number" id="conv-jy" min="1300" max="1500" class="modal-input" oninput="CalendarUI.updateConvertedDates()">
+            <input type="number" id="conv-jy" min="1300" max="1500" class="modal-input">
           </div>
         </div>
 
@@ -488,7 +488,7 @@
     <div class="modal-card glass-modal-card">
       <div class="modal-header">
         <h3 class="modal-title">نوشتن کار جدید در دست‌نویس</h3>
-        <button id="todo-modal-close" class="modal-close-btn">✕</button>
+        <button id="todo-modal-close" class="modal-close-btn" type="button" title="بستن">✕</button>
       </div>
       <form id="todo-form" class="modal-body">
         <div class="form-group">
@@ -510,7 +510,8 @@
           <textarea id="td-desc-input" rows="3" class="modal-input modal-textarea" placeholder="یادداشت‌های بیشتر..."></textarea>
         </div>
         <div class="modal-actions-row">
-          <button type="submit" class="btn-primary-action">ثبت یادداشت</button>
+          <button type="submit" class="modal-action-btn primary-action">ثبت یادداشت</button>
+          <button type="button" id="td-cancel-btn" class="modal-action-btn secondary-action">انصراف</button>
         </div>
       </form>
     </div>
@@ -522,7 +523,7 @@
     <div class="modal-card glass-modal-card">
       <div class="modal-header">
         <h3 class="modal-title">اوقات شرعی امروز</h3>
-        <button id="prayer-modal-close" class="modal-close-btn">✕</button>
+        <button id="prayer-modal-close" class="modal-close-btn" type="button" title="بستن">✕</button>
       </div>
       <div class="modal-body">
         <div class="prayer-times-grid">
@@ -557,7 +558,7 @@
     <div class="modal-card glass-modal-card">
       <div class="modal-header">
         <h3 class="modal-title">تنظیمات و شخصی‌سازی دست‌نویس</h3>
-        <button id="settings-modal-close" class="modal-close-btn">✕</button>
+        <button id="settings-modal-close" class="modal-close-btn" type="button" title="بستن">✕</button>
       </div>
       <div class="modal-body">
         <div class="settings-section">

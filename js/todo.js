@@ -46,41 +46,53 @@ const Todo = (() => {
     }
   ];
 
+  /**
+   * Synchronously retrieves cached todos for instant zero-latency UI rendering (0ms delay)
+   */
+  function getTodosSync() {
+    try {
+      const item = localStorage.getItem(STORAGE_KEY);
+      if (item) {
+        const parsed = JSON.parse(item);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+      }
+    } catch {
+      // fallback
+    }
+    return DEFAULT_TODOS;
+  }
+
   async function loadTodos() {
     return new Promise((resolve) => {
       if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
         chrome.storage.local.get([STORAGE_KEY], (res) => {
           if (res && res[STORAGE_KEY] && Array.isArray(res[STORAGE_KEY])) {
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(res[STORAGE_KEY]));
+            } catch {}
             resolve(res[STORAGE_KEY]);
           } else {
-            resolve(DEFAULT_TODOS);
+            resolve(getTodosSync());
           }
         });
       } else {
-        try {
-          const item = localStorage.getItem(STORAGE_KEY);
-          if (item) {
-            resolve(JSON.parse(item));
-          } else {
-            resolve(DEFAULT_TODOS);
-          }
-        } catch {
-          resolve(DEFAULT_TODOS);
-        }
+        resolve(getTodosSync());
       }
     });
   }
 
   async function saveTodos(todos) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+    } catch (e) {
+      console.error(e);
+    }
     return new Promise((resolve) => {
       if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
         chrome.storage.local.set({ [STORAGE_KEY]: todos }, () => resolve(true));
       } else {
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
-        } catch (e) {
-          console.error(e);
-        }
         resolve(true);
       }
     });
@@ -88,6 +100,7 @@ const Todo = (() => {
 
   return {
     DEFAULT_TODOS,
+    getTodosSync,
     loadTodos,
     saveTodos
   };
