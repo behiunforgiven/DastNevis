@@ -1835,6 +1835,32 @@ body {
   cursor: pointer;
 }
 
+.setting-select-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.setting-select-row select {
+  min-width: 140px;
+  cursor: pointer;
+}
+
+.modal-input option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.prayer-modal-city {
+  font-size: 0.88rem;
+  color: var(--accent-sky);
+  font-weight: 500;
+  margin-right: 6px;
+}
+
 .custom-toggle {
   width: 18px;
   height: 18px;

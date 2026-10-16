@@ -11,7 +11,8 @@ const App = (() => {
     timeFormat24: true,
     wallpaper: 'assets/images/bg-nature.jpg',
     glassBlur: 16,
-    searchEngine: 'google'
+    searchEngine: 'google',
+    cityName: 'تهران'
   };
 
   const SEARCH_ENGINES = {
@@ -23,6 +24,13 @@ const App = (() => {
     torob: { name: 'ترب', url: 'https://torob.com/search/?query=' },
     chatgpt: { name: 'هوش مصنوعی', url: 'https://chatgpt.com/?q=' }
   };
+
+  function findCityByName(name) {
+    if (!name) return null;
+    return Weather.DEFAULT_CITIES.find(
+      c => c.name === name || c.nameEn.toLowerCase() === String(name).toLowerCase()
+    ) || null;
+  }
 
   function init() {
     loadSettings();
@@ -66,14 +74,78 @@ const App = (() => {
     } catch {
       // fallback
     }
+
+    // Synchronously restore saved city (0ms delay for instant new-tab rendering)
+    const savedCityName = userSettings.cityName || localStorage.getItem('dastnevis_selected_city');
+    if (savedCityName) {
+      const found = findCityByName(savedCityName);
+      if (found) {
+        currentCity = found;
+      }
+    }
+
+    // Asynchronously sync settings and city from chrome.storage.local
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+      chrome.storage.local.get(['dastnevis_settings', 'dastnevis_selected_city'], (res) => {
+        if (!res) return;
+        let cityNeedsUpdate = false;
+        if (res.dastnevis_settings) {
+          userSettings = { ...userSettings, ...res.dastnevis_settings };
+        }
+        const chromeCityName = res.dastnevis_selected_city || (res.dastnevis_settings && res.dastnevis_settings.cityName);
+        if (chromeCityName && chromeCityName !== currentCity.name) {
+          const found = findCityByName(chromeCityName);
+          if (found) {
+            currentCity = found;
+            cityNeedsUpdate = true;
+          }
+        }
+        if (cityNeedsUpdate) {
+          const cityEl = document.getElementById('weather-city-name');
+          if (cityEl) cityEl.textContent = currentCity.name;
+          const citySelect = document.getElementById('setting-city-select');
+          if (citySelect) citySelect.value = currentCity.name;
+          initWeather();
+        }
+      });
+    }
   }
 
   function saveSettings() {
     try {
       localStorage.setItem('dastnevis_settings', JSON.stringify(userSettings));
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.set({ dastnevis_settings: userSettings });
+      }
     } catch {
       // ignore
     }
+  }
+
+  function setCity(city) {
+    if (!city) return;
+    currentCity = city;
+    userSettings.cityName = city.name;
+    saveSettings();
+
+    try {
+      localStorage.setItem('dastnevis_selected_city', city.name);
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.set({ dastnevis_selected_city: city.name });
+      }
+    } catch (e) {
+      console.error('Error saving city to storage:', e);
+    }
+
+    const cityEl = document.getElementById('weather-city-name');
+    if (cityEl) cityEl.textContent = currentCity.name;
+
+    const citySelect = document.getElementById('setting-city-select');
+    if (citySelect && citySelect.value !== city.name) {
+      citySelect.value = city.name;
+    }
+
+    initWeather();
   }
 
   function applyWallpaper(wpUrl) {
@@ -154,8 +226,10 @@ const App = (() => {
     const iconContainer = document.getElementById('weather-icon-container');
     const minMaxEl = document.getElementById('weather-minmax');
     const humidityEl = document.getElementById('weather-humidity');
+    const ptCityEl = document.getElementById('pt-city-name');
 
     if (cityEl) cityEl.textContent = currentCity.name;
+    if (ptCityEl) ptCityEl.textContent = `(${currentCity.name})`;
 
     function applyWeatherData(wData) {
       if (!wData) return;
@@ -197,12 +271,18 @@ const App = (() => {
     const cached = Weather.getCachedWeather(currentCity);
     if (cached) {
       applyWeatherData(cached);
+    } else {
+      if (tempEl) tempEl.textContent = '--°';
+      if (commentEl) commentEl.textContent = 'در حال دریافت اطلاعات آب‌وهوا...';
     }
 
-    // 2. Fetch fresh weather data in the background
+    // 2. Fetch fresh weather data in the background (with race condition guard)
+    const requestedCity = currentCity.name;
     try {
       const wData = await Weather.fetchWeather(currentCity);
-      applyWeatherData(wData);
+      if (currentCity.name === requestedCity) {
+        applyWeatherData(wData);
+      }
     } catch (e) {
       console.error('Weather load error:', e);
     }
@@ -826,13 +906,75 @@ const App = (() => {
 
   /* ------------------- SIDEBAR & MODALS ------------------- */
   function initSidebarAndModals() {
-    // City Selector in Weather
+    // City Selector in Weather badge
     const cityBtn = document.getElementById('weather-city-btn');
     if (cityBtn) {
       cityBtn.addEventListener('click', () => {
         const nextIdx = (Weather.DEFAULT_CITIES.findIndex(c => c.name === currentCity.name) + 1) % Weather.DEFAULT_CITIES.length;
-        currentCity = Weather.DEFAULT_CITIES[nextIdx];
-        initWeather();
+        setCity(Weather.DEFAULT_CITIES[nextIdx]);
+      });
+    }
+
+    // City Selector in Settings Modal
+    const citySelect = document.getElementById('setting-city-select');
+    if (citySelect) {
+      citySelect.innerHTML = Weather.DEFAULT_CITIES.map(c =>
+        `<option value="${c.name}">${c.name} (${c.nameEn})</option>`
+      ).join('');
+      citySelect.value = currentCity.name;
+      citySelect.addEventListener('change', (e) => {
+        const selected = findCityByName(e.target.value);
+        if (selected) {
+          setCity(selected);
+        }
+      });
+    }
+
+    // Cross-tab sync for city & settings updates
+    window.addEventListener('storage', (e) => {
+      if ((e.key === 'dastnevis_selected_city' || e.key === 'dastnevis_settings') && e.newValue) {
+        let newCityName = null;
+        if (e.key === 'dastnevis_selected_city') {
+          newCityName = e.newValue;
+        } else {
+          try {
+            const parsed = JSON.parse(e.newValue);
+            newCityName = parsed.cityName;
+          } catch {}
+        }
+        if (newCityName && newCityName !== currentCity.name) {
+          const found = findCityByName(newCityName);
+          if (found) {
+            currentCity = found;
+            const cityEl = document.getElementById('weather-city-name');
+            if (cityEl) cityEl.textContent = currentCity.name;
+            if (citySelect) citySelect.value = currentCity.name;
+            initWeather();
+          }
+        }
+      }
+    });
+
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.onChanged) {
+      chrome.storage.onChanged.addListener((changes, area) => {
+        if (area === 'local') {
+          let newCityName = null;
+          if (changes.dastnevis_selected_city && changes.dastnevis_selected_city.newValue) {
+            newCityName = changes.dastnevis_selected_city.newValue;
+          } else if (changes.dastnevis_settings && changes.dastnevis_settings.newValue && changes.dastnevis_settings.newValue.cityName) {
+            newCityName = changes.dastnevis_settings.newValue.cityName;
+          }
+          if (newCityName && newCityName !== currentCity.name) {
+            const found = findCityByName(newCityName);
+            if (found) {
+              currentCity = found;
+              const cityEl = document.getElementById('weather-city-name');
+              if (cityEl) cityEl.textContent = currentCity.name;
+              if (citySelect) citySelect.value = currentCity.name;
+              initWeather();
+            }
+          }
+        }
       });
     }
 
@@ -860,7 +1002,12 @@ const App = (() => {
     const settingsBackdrop = document.getElementById('settings-modal-backdrop');
 
     if (settingsBtn && settingsModal) {
-      settingsBtn.addEventListener('click', () => settingsModal.classList.add('active'));
+      settingsBtn.addEventListener('click', () => {
+        if (citySelect) {
+          citySelect.value = currentCity.name;
+        }
+        settingsModal.classList.add('active');
+      });
     }
     if (settingsClose) settingsClose.addEventListener('click', () => settingsModal.classList.remove('active'));
     if (settingsBackdrop) settingsBackdrop.addEventListener('click', (e) => {
