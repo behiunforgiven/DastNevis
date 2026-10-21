@@ -1373,6 +1373,12 @@ body {
   border-color: var(--accent-sky);
 }
 
+#sc-url-input,
+#sc-custom-url-input {
+  direction: ltr;
+  text-align: left;
+}
+
 .modal-textarea {
   resize: vertical;
 }
